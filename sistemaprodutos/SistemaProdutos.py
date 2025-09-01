@@ -12,7 +12,7 @@ def menu():
 def escolha_id():
     try:
         idx = int(input("Escolha o ID do item: ")) - 1
-        if (idx < 0 or idx > len(nomes)):
+        if (idx < 0 or idx >= len(nomes)):
             print("Valor inexistente!")
             return None
         return idx
@@ -70,7 +70,7 @@ def alterar_prod(): #ALTERA O PRODUTO
     match op:
         case 1: #ALTERA O NOME                                        
             new_nome = input("Escolha o novo nome: ") 
-            if (new_nome.replace(" ", "").isalpha):
+            if (new_nome.replace(" ", "").isalpha()):
                 nomes[produto_id] = new_nome
                 print("Nome alterado!")
             else: print("Digite um nome valido!")
@@ -115,16 +115,25 @@ def excluir_prod(): #Exclui o produto
     qtds = []
 
     for i in range(len(novos_nome)):
-        nomes.append(novos_nome)
-        precos.append(novos_preco)
-        qtds.append(novos_qtd)
+        nomes.append(novos_nome[i])
+        precos.append(novos_preco[i])
+        qtds.append(novos_qtd[i])
+
+
+def opcao():
+    try:
+        opcao = int(input("Escolha uma opção: "))
+    except ValueError:
+        print("Digite um valor valido!")
+    
+
 
 
 def main():
     while True:
 
         menu()
-        op = int(input("escolha uma opcão: "))
+        op = opcao()
 
         match op:
             case 1:
