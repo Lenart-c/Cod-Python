@@ -31,6 +31,27 @@ def menu():
     print("5 - excluir produtos")
     print("0 - sair")
 
+def receber_preco():
+    try:
+        preco = float(input())
+        if preco < 0:
+            print("Digite um valor possitivo!")
+            return
+        return preco
+    except ValueError:
+        print("Valor Invalido!")
+        return
+
+def receber_qtd():
+    try:
+        qtd = int(input())
+        if qtd < 0:
+            print("Digite um valor possitivo")
+            return
+    except ValueError:
+        print("Valor invalido!")
+        return
+
 def opcao():
     try:
         opcao = int(input("Escolha uma opção: "))
@@ -56,10 +77,10 @@ def lista_vazia():
     return False
     
 def produtos(): #ADICIONA O PRODUTO
-
-    nome_prod = input(str("Insera o produto: ")) #Passa o nome do produto
-    preco_prod = float(input("Insira o valor do produto: ")) #Passa o valor do produto
-    qtd_prod = int(input("Insira a quantidade de produtos:")) #Passa a quantidade de produtos
+    
+    nome_prod = input("Insera o produto: ") #Passa o nome do produto
+    preco_prod = print("Digite um valor: "),receber_preco() #Passa o valor do produto
+    qtd_prod = print("Insira a quantidade de produtos: "),receber_qtd() #Passa a quantidade de produtos
 
     nomes.append(nome_prod) #Adiciona o nome do produto
     precos.append(preco_prod) # Adiciona o preco do produto
@@ -105,12 +126,6 @@ def alterar_prod(): #ALTERA O PRODUTO
     if lista_vazia():
         return
 
-    listar_prod()
-    
-    op = opcao()
-
-
-    
     while True:
 
         print ("--- ESCOLHA UMA OPÇÃO:")
@@ -118,11 +133,15 @@ def alterar_prod(): #ALTERA O PRODUTO
         print("2 - Alterar preço")
         print("3 - Alterar quantidade")
         print("0 - sair")
-            
+
+        op = opcao()
+        
+
         match op:
             case 1: #ALTERA O NOME   
+                listar_prod()
                 produto_id = escolha_id()       
-                 if produto_id is None:
+                if produto_id is None:
                     return                              
                 new_nome = input("Escolha o novo nome: ") 
                 if (new_nome.replace(" ", "").isalpha()):
@@ -130,25 +149,26 @@ def alterar_prod(): #ALTERA O PRODUTO
                     print(f"Nome foi alterado para {new_nome}")
                 else: print("Digite um nome valido!")
             case 2: #ALTERA O PREÇO 
+                listar_prod()
                 produto_id = escolha_id()
-                 if produto_id is None:
+                if produto_id is None:
                     return
-                new_preco = float(input("Escolha o novo preço: "))
+                new_preco = print("Digite o novo preço: "), receber_preco()
                 precos[produto_id] = new_preco
-                print(f"Preço de {nome_prod[produto_id]} foi alterado")
+                print(f"Preço de {nomes[produto_id]} foi alterado")
             case 3: #ALTERA A QUANTIDADE
+                listar_prod()
                 produto_id = escolha_id()
-                 if produto_id is None:
+                if produto_id is None:
                     return
-                new_qtd = int(input("Coloque a nova quantidade: "))
+                new_qtd = print("Digite a nova quantidade: "), receber_qtd()         
                 qtds[produto_id] = new_qtd
-                print(f"Quantidade de {nome_prod[produto_id]} foi alterada")
+                print(f"Quantidade de {nomes[produto_id]} foi alterada")
             case 0: #SAIR
                 print("saindo...")
                 return False
             case _: #DEFALT
-                print("Digite uma opção valida!")
-                
+                print("Digite uma opção valida!")              
 
 def excluir_prod(): #Exclui o produto
     global nomes, precos, qtds
