@@ -2,12 +2,41 @@ nomes = []
 precos = []
 qtds = []
 
+
+def lista_teste():
+    produtos_teste = [
+        ("Arroz", 20.0, 10),
+        ("Feijão", 7.5, 5),
+        ("Macarrão", 4.0, 2),
+        ("Açúcar", 3.5, 0),
+        ("Sal", 2.0, 1),
+        ("Óleo", 8.0, 4),
+        ("Café", 15.0, 3),
+        ("Leite", 5.0, 6),
+        ("Pão", 1.5, 0),
+        ("Manteiga", 6.0, 2)
+    ]
+    for nome, preco, quantidade in produtos_teste:
+        nomes.append(nome)
+        precos.append(preco)
+        qtds.append(quantidade)
+
+lista_teste()
+
 def menu():
     print("1 - adicionar produtos")
     print("2 - alterar produtos")
-    print("3 - listar produtos")   
-    print("4 - excluir produtos")
+    print("3 - listar produtos")  
+    print("4 - adicionar estoque") 
+    print("5 - excluir produtos")
     print("0 - sair")
+
+def opcao():
+    try:
+        opcao = int(input("Escolha uma opção: "))
+        return opcao
+    except ValueError:
+        print("Digite um valor valido!")
 
 def escolha_id():
     try:
@@ -26,7 +55,6 @@ def lista_vazia():
         return True
     return False
     
-
 def produtos(): #ADICIONA O PRODUTO
 
     nome_prod = input(str("Insera o produto: ")) #Passa o nome do produto
@@ -37,53 +65,90 @@ def produtos(): #ADICIONA O PRODUTO
     precos.append(preco_prod) # Adiciona o preco do produto
     qtds.append(qtd_prod) #Adiciona a quantidades de produto
 
+    print(f"{nome_prod} foi adicionado!")
 
 def listar_prod():
 
     if lista_vazia():
-         return
+        return
 
     for i in range(len(nomes)):
         print(f"Lista: {i+1}, Nome: {nomes[i]}, Preço {precos[i]}, Quantidade: {qtds[i]}")
 
+def adicionar_estoque():
+    if lista_vazia():
+        return
+        
+    
+    listar_prod()
 
+    id_produto = escolha_id()
+
+    if id_produto is None:
+        print("Digite uma lista existente!")
+        return
+    
+    try:
+        adiciona_quantidade = int(input("Digite quantos produtos deseja adicionar: "))
+        if adiciona_quantidade < 0:
+            print("Produtos não pode ser negativo!")
+            return
+    except ValueError:
+        print("Valor invalido!")
+        return
+    
+    qtds[id_produto] += adiciona_quantidade
+
+    print(f"{adiciona_quantidade} foram adicionados ao {nomes[id_produto]}")
 
 def alterar_prod(): #ALTERA O PRODUTO
     if lista_vazia():
         return
 
     listar_prod()
-    print ("--- ESCOLHA UMA OPÇÃO:")
-    print("1 - Alterar nome ")
-    print("2 - Alterar preço")
-    print("3 - Alterar quantidade")
-    print("0 - sair")
     
-    op = int(input("Digite a opção desejada: "))
-
-    produto_id = escolha_id()
-
-    if produto_id is None:
-        return
+    op = opcao()
 
 
-    match op:
-        case 1: #ALTERA O NOME                                        
-            new_nome = input("Escolha o novo nome: ") 
-            if (new_nome.replace(" ", "").isalpha()):
-                nomes[produto_id] = new_nome
-                print("Nome alterado!")
-            else: print("Digite um nome valido!")
-        case 2: #ALTERA O PREÇO 
-            new_preco = float(input("Escolha o novo preço: "))
-            precos[produto_id] = new_preco
-        case 3: #ALTERA A QUANTIDADE
-            new_qtd = int(input("Coloque a nova quantidade: "))
-            qtds[produto_id] = new_qtd
-        case 0: #SAIR
-            print("saindo...")
-        case _: #DEFALT
-            print("I")
+    
+    while True:
+
+        print ("--- ESCOLHA UMA OPÇÃO:")
+        print("1 - Alterar nome ")
+        print("2 - Alterar preço")
+        print("3 - Alterar quantidade")
+        print("0 - sair")
+            
+        match op:
+            case 1: #ALTERA O NOME   
+                produto_id = escolha_id()       
+                 if produto_id is None:
+                    return                              
+                new_nome = input("Escolha o novo nome: ") 
+                if (new_nome.replace(" ", "").isalpha()):
+                    nomes[produto_id] = new_nome
+                    print(f"Nome foi alterado para {new_nome}")
+                else: print("Digite um nome valido!")
+            case 2: #ALTERA O PREÇO 
+                produto_id = escolha_id()
+                 if produto_id is None:
+                    return
+                new_preco = float(input("Escolha o novo preço: "))
+                precos[produto_id] = new_preco
+                print(f"Preço de {nome_prod[produto_id]} foi alterado")
+            case 3: #ALTERA A QUANTIDADE
+                produto_id = escolha_id()
+                 if produto_id is None:
+                    return
+                new_qtd = int(input("Coloque a nova quantidade: "))
+                qtds[produto_id] = new_qtd
+                print(f"Quantidade de {nome_prod[produto_id]} foi alterada")
+            case 0: #SAIR
+                print("saindo...")
+                return False
+            case _: #DEFALT
+                print("Digite uma opção valida!")
+                
 
 def excluir_prod(): #Exclui o produto
     global nomes, precos, qtds
@@ -119,15 +184,7 @@ def excluir_prod(): #Exclui o produto
         precos.append(novos_preco[i])
         qtds.append(novos_qtd[i])
 
-
-def opcao():
-    try:
-        opcao = int(input("Escolha uma opção: "))
-    except ValueError:
-        print("Digite um valor valido!")
-    
-
-
+    print(f"{produto_removido} foi excluido com sucesso!")
 
 def main():
     while True:
@@ -143,6 +200,8 @@ def main():
             case 3:
                 listar_prod()
             case 4:
+                adicionar_estoque()
+            case 5:
                 excluir_prod()
             case 0:
                 print("saindo...")
